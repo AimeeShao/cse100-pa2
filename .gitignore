@@ -9,4 +9,4 @@ __pycache__
 .DS_Store
 
 *.zip
-./data/freq_dict.txt
+data/freq_dict.txt
