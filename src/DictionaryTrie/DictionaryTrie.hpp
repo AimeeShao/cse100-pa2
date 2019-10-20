@@ -40,6 +40,15 @@ class DictionaryTrie {
         TrieNode(const char& d) : data(d), word(false), freq(0) {
             left = right = middle = nullptr;
         }
+
+        /* Deconstructor.
+         * Deallocates the child pointers.
+         */
+        ~TrieNode() {
+            delete left;
+            delete right;
+            delete middle;
+        }
     };
     typedef DictionaryTrie::TrieNode TrieNode;
 

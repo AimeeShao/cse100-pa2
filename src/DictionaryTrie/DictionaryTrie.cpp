@@ -64,9 +64,7 @@ std::vector<string> DictionaryTrie::predictUnderscores(
 }
 
 /* Deallocates the dictionary trie. */
-DictionaryTrie::~DictionaryTrie() {
-    // deallocateRec(root);
-}
+DictionaryTrie::~DictionaryTrie() { delete root; }
 
 /* Helper method to insert a word recursively.
  * @param word Word to insert
@@ -106,5 +104,3 @@ bool DictionaryTrie::insertRec(string word, unsigned int freq,
         return insertRec(word, freq, index + 1, curr->middle);
     }
 }
-
-// void DictionaryTrie::deallocateRec()
