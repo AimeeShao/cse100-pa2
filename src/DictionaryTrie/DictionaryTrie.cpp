@@ -13,7 +13,7 @@
  */
 DictionaryTrie::DictionaryTrie() { root = nullptr; }
 
-/* Inserts a word into the dictionary trie with an assigned frequency.
+/* Inserts a word into the dictionary trie with a given frequency.
  * Creates TrieNodes to store letters in the word along with way.
  * @param word Word to insert into the dictionary trie
  * @param freq Frequency of the word
@@ -27,7 +27,13 @@ bool DictionaryTrie::insert(string word, unsigned int freq) { return false; }
  */
 bool DictionaryTrie::find(string word) const { return false; }
 
-/* TODO */
+/* Finds up to numCompletions of most frequent completions given a prefix.
+ * The words must be found in the dictionary and will be listed from most to
+ * least frequent.
+ * @param prefix Prefix to complete
+ * @param numCompletions Number of words to find in order from most frequency
+ * @return vector of numCompletions words of most frequent completions of prefix
+ */
 vector<string> DictionaryTrie::predictCompletions(string prefix,
                                                   unsigned int numCompletions) {
     return {};

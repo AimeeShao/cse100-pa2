@@ -20,6 +20,10 @@ using namespace std;
  * a mulit-way trie or a ternary search tree.
  */
 class DictionaryTrie {
+  private:
+    TrieNode* root;  // stores the root of the dictionary trie
+
+  public:
     /* The class for a trie node that will store a letter to help build up the
      * ternary search tree.
      */
@@ -40,16 +44,12 @@ class DictionaryTrie {
         }
     };
 
-  private:
-    TrieNode* root;  // stores the root of the dictionary trie
-
-  public:
     /* Constructor.
      * Initializes the dictionary trie.
      */
     DictionaryTrie();
 
-    /* Inserts a word into the dictionary trie with an assigned frequency.
+    /* Inserts a word into the dictionary trie with a given frequency.
      * Creates TrieNodes to store letters in the word along with way.
      * @param word Word to insert into the dictionary trie
      * @param freq Frequency of the word
@@ -63,7 +63,14 @@ class DictionaryTrie {
      */
     bool find(string word) const;
 
-    /* TODO: add function header */
+    /* Finds up to numCompletions of most frequent completions given a prefix.
+     * The words must be found in the dictionary and will be listed from most to
+     * least frequent.
+     * @param prefix Prefix to complete
+     * @param numCompletions Number of words to find in order of most
+     * frequency
+     * @return vector of numCompletions words with most frequency with prefix
+     */
     vector<string> predictCompletions(string prefix,
                                       unsigned int numCompletions);
 
