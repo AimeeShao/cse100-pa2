@@ -24,11 +24,40 @@ TEST(DictTrieTests, EMPTY_TEST) {
     ASSERT_EQ(dict.find("abrakadabra"), false);
 }
 
-/* Small Insert and find Test */
-TEST(DictTrieTests, SMALL_TEST) {
+/* small insert Test */
+TEST(DictTrieTests, SMALL_INSERT_TEST) {
+    DictionaryTrie dict;
+    ASSERT_TRUE(dict.insert("word", 10));
+}
+
+/* small find Test */
+TEST(DictTrieTests, SMALL_FIND_TEST) {
     DictionaryTrie dict;
     dict.insert("word", 10);
     ASSERT_TRUE(dict.find("word"));
+}
+
+/* small insert fail Test */
+TEST(DictTrieTests, SMALL_INSERT_FAIL_TEST) {
+    DictionaryTrie dict;
+    dict.insert("word", 1);
+    // Assert inserting duplicate word is false
+    ASSERT_FALSE(dict.insert("word", 10));
+}
+
+/* Insert empty Test */
+TEST(DictTrieTests, INSERT_EMPTY_TEST) {
+    DictionaryTrie dict;
+    // Assert inserting empty string is false
+    ASSERT_FALSE(dict.insert("", 10));
+}
+
+/* small find fail Test */
+TEST(DictTrieTests, SMALL_FIND_FAIL_TEST) {
+    DictionaryTrie dict;
+    dict.insert("word", 10);
+    // Assert cant find word
+    ASSERT_FALSE(dict.find("wor"));
 }
 
 /* Large Insert and find Test */
