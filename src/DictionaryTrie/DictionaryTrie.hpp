@@ -21,9 +21,6 @@ using namespace std;
  */
 class DictionaryTrie {
   private:
-    TrieNode* root;  // stores the root of the dictionary trie
-
-  public:
     /* The class for a trie node that will store a letter to help build up the
      * ternary search tree.
      */
@@ -43,7 +40,11 @@ class DictionaryTrie {
             left = right = nullptr;
         }
     };
+    typedef DictionaryTrie::TrieNode TrieNode;
 
+    TrieNode* root;  // pointer to root of the dictionary trie, or 0 if empty
+
+  public:
     /* Constructor.
      * Initializes the dictionary trie.
      */

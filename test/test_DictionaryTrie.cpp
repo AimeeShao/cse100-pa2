@@ -24,12 +24,6 @@ TEST(DictTrieTests, EMPTY_TEST) {
     ASSERT_EQ(dict.find("abrakadabra"), false);
 }
 
-/* TrieNode test */
-TEST(DictTrieTests, TRIE_NODE_TEST) {
-    DictionaryTrie::TrieNode node('w');
-    ASSERT_EQ(node.data, 'w');
-}
-
 /* Small Insert and find Test */
 TEST(DictTrieTests, SMALL_TEST) {
     DictionaryTrie dict;
