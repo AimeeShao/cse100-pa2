@@ -30,6 +30,14 @@ TEST(DictTrieTests, SMALL_INSERT_TEST) {
     ASSERT_TRUE(dict.insert("word", 10));
 }
 
+/* small insert similar Test */
+TEST(DictTrieTests, SMALL_INSERT_SIMILAR_TEST) {
+    DictionaryTrie dict;
+    dict.insert("word", 10);
+    // Assert we can insert word in middle of another word
+    ASSERT_TRUE(dict.insert("wor", 1));
+}
+
 /* small find Test */
 TEST(DictTrieTests, SMALL_FIND_TEST) {
     DictionaryTrie dict;
