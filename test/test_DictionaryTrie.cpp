@@ -24,6 +24,12 @@ TEST(DictTrieTests, EMPTY_TEST) {
     ASSERT_EQ(dict.find("abrakadabra"), false);
 }
 
+/* small word insert Test */
+TEST(DictTrieTests, SMALL_WORD_INSERT_TEST) {
+    DictionaryTrie dict;
+    ASSERT_TRUE(dict.insert("a", 10));
+}
+
 /* small insert Test */
 TEST(DictTrieTests, SMALL_INSERT_TEST) {
     DictionaryTrie dict;
@@ -36,6 +42,14 @@ TEST(DictTrieTests, SMALL_INSERT_SIMILAR_TEST) {
     dict.insert("word", 10);
     // Assert we can insert word in middle of another word
     ASSERT_TRUE(dict.insert("wor", 1));
+}
+
+/* small word duplicate insert Test */
+TEST(DictTrieTests, SMALL_WORD_INSERT_DUP_TEST) {
+    DictionaryTrie dict;
+    dict.insert("a", 10);
+    // Assert small word duplicate insert fails
+    ASSERT_FALSE(dict.insert("a", 1));
 }
 
 /* small find Test */
