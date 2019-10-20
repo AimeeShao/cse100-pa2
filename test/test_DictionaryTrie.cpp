@@ -91,7 +91,7 @@ TEST(DictTrieTests, LARGE_FIND_FALSE_TEST) {
 }
 
 /* Predict Completions test */
-TEST(DictTrieTests, PREDICT_COMPLETIONS_FTEST) {
+TEST(DictTrieTests, PREDICT_COMPLETIONS_TEST) {
     DictionaryTrie dict;
     dict.insert("call", 5);
     dict.insert("me", 20);
