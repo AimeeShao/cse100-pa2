@@ -28,21 +28,32 @@ class DictionaryTrie {
       public:
         TrieNode* left;
         TrieNode* right;
+        TrieNode* middle;
         char const data;  // the constant data in this node
-        bool const word;  // determines if this is a word node
-        int const freq;   // frequency of this word if word node
+        bool word;        // determines if this is a word node
+        int freq;         // frequency of this word if word node
 
         /* Constructor.
          * Initializes a TrieNode with given data.
          * @param c Data/element of this node
          */
         TrieNode(const char& d) : data(d), word(false), freq(0) {
-            left = right = nullptr;
+            left = right = middle = nullptr;
         }
     };
     typedef DictionaryTrie::TrieNode TrieNode;
 
     TrieNode* root;  // pointer to root of the dictionary trie, or 0 if empty
+
+    /* Helper method to insert a word recursively.
+     * @param word Word to insert
+     * @param freq Frequency of the word to insert
+     * @param index Index of character in the word we are currently inserting
+     * @param curr Current TrieNode we are checking
+     * @return True if inserted. False otherwise.
+     */
+    bool insertRec(string word, unsigned int freq, unsigned int index,
+                   TrieNode* curr);
 
   public:
     /* Constructor.
