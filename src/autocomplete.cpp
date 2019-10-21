@@ -77,9 +77,17 @@ int main(int argc, char** argv) {
         cout << "Enter a number of completions:" << endl;
         cin >> numberOfCompletions;
 
-        // print out strings in vector returned by dictionary trie's prediction
-        for (string s : dt->predictCompletions(word, numberOfCompletions)) {
-            cout << s << endl;
+        // if contains underscore, use predictUnderscores
+        if (word.find("_") != std::string::npos) {
+            for (string s : dt->predictUnderscores(word, numberOfCompletions)) {
+                cout << s << endl;
+            }
+        } else {
+            // print out strings in vector returned by dictionary trie's
+            // prediction
+            for (string s : dt->predictCompletions(word, numberOfCompletions)) {
+                cout << s << endl;
+            }
         }
 
         cout << "Continue? (y/n)" << endl;
