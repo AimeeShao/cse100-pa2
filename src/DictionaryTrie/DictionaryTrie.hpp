@@ -116,7 +116,12 @@ class DictionaryTrie {
     vector<string> predictCompletions(string prefix,
                                       unsigned int numCompletions);
 
-    /* TODO: add function header */
+    /* Finds up to numCompletions of most frequent completions that fit in
+     * the pattern that may contain a wild card.
+     * @param pattern Pattern with wild card to match to
+     * @param numCompletions Number of words to find in order of most freq
+     * @return vector of numCompletions words matching pattern with most freq
+     */
     vector<string> predictUnderscores(string pattern,
                                       unsigned int numCompletions);
 

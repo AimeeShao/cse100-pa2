@@ -50,7 +50,7 @@ bool DictionaryTrie::insert(string word, unsigned int freq) {
  * @return True if we found the word. False otherwise.
  */
 bool DictionaryTrie::find(string word) const {
-    if (root == nullptr) {  // empty then false
+    if (root == nullptr || word == "") {  // empty then false
         return false;
     }  // otherwise, go find
     return findRec(word, 0, root);
@@ -107,9 +107,15 @@ vector<string> DictionaryTrie::predictCompletions(string prefix,
     return completions;
 }
 
-/* TODO */
+/* Finds up to numCompletions of most frequent completions that fit in
+ * the pattern that may contain a wild card.
+ * @param pattern Pattern with wild card to match to
+ * @param numCompletions Number of words to find in order of most freq
+ * @return vector of numCompletions words matching pattern with most freq
+ */
 std::vector<string> DictionaryTrie::predictUnderscores(
     string pattern, unsigned int numCompletions) {
+
     return {};
 }
 
