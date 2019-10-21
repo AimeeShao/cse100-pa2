@@ -170,13 +170,18 @@ TEST(DictTrieTests, LARGE_PREDICT_COMPLETIONS_TEST) {
 /* Large Predict Underscores test */
 TEST(DictTrieTests, LARGE_PREDICT_UNDERSCORES_TEST) {
     DictionaryTrie dict;
+    dict.insert("hi", 3);
+    dict.insert("wrong", 3);
     dict.insert("gato", 5);
     dict.insert("gote", 5);
     dict.insert("geit", 5);
+    dict.insert("geat", 5);
     dict.insert("gete", 5);
     dict.insert("gate", 5);
     dict.insert("guts", 5);
+    dict.insert("gu", 5);
     dict.insert("goto", 10);
+    dict.insert("gutes", 5);
     dict.insert("gute", 5);
     dict.insert("gut", 5);
     dict.insert("gits", 5);
@@ -193,9 +198,10 @@ TEST(DictTrieTests, LARGE_PREDICT_UNDERSCORES_TEST) {
     answer.emplace_back("gits");
     answer.emplace_back("gote");
     answer.emplace_back("gute");
+    answer.emplace_back("guts");
     answer.emplace_back("geta");
     answer.emplace_back("getz");
 
     // Assert that predict underscores works correctly
-    ASSERT_EQ(dict.predictUnderscores("g_t_", 11), answer);
+    ASSERT_EQ(dict.predictUnderscores("g_t_", 12), answer);
 }
