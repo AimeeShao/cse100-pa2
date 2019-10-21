@@ -4,9 +4,15 @@
  *
  * Author: Aimee T Shao
  * Email: atshao@ucsd.edu
+ * Resources: UCSD CSE100 PA2 starter code, PA2 Implementation Guide,
+ * https://www.geeksforgeeks.org/priority-queue-of-pairs-in-c-ordered-by-first/
  */
 #include "DictionaryTrie.hpp"
+#include <algorithm>
 #include <iostream>
+#include <queue>
+
+typedef pair<int, string> pairing;  // used in predictCompletions
 
 /* Constructor.
  * Initializes the dictionary trie.
@@ -59,7 +65,47 @@ bool DictionaryTrie::find(string word) const {
  */
 vector<string> DictionaryTrie::predictCompletions(string prefix,
                                                   unsigned int numCompletions) {
-    return {};
+    // Stores final answer
+    vector<string> completions;
+
+    // minHeap of pairs of frequency with the string, sorting frequency (first)
+    std::priority_queue<pairing, vector<pairing>, greater<pairing>> pq;
+
+    unsigned int index = 0;  // index to traverse prefix word
+    TrieNode* curr = root;   // current node when traversing trie
+
+    while (index < prefix.length()) {  // find first node where prefix exists
+        if (curr == nullptr) {  // return empty vector if no completions exist
+            return vector<string>();
+        }
+
+        if (prefix.at(index) < curr->data) {  // go left
+            curr = curr->left;
+        } else if (prefix.at(index) > curr->data) {  // go right
+            curr = curr->right;
+        } else {  // go middle
+            index++;
+            // if prefix is a word, add it to the priority queue
+            if (index == prefix.length() && curr->word) {
+                pq.push(make_pair(curr->freq, prefix));
+            }
+            curr = curr->middle;
+        }
+    }
+
+    // find all other words with the prefix
+    predictCompletionsRec(numCompletions, curr, prefix, pq);
+
+    while (numCompletions > 0) {  // move words in pq to vector in order
+        completions.push_back(pq.top().second);
+        pq.pop();
+        numCompletions--;
+    }
+
+    // reverse so in order from greatest freq to lowest
+    std::reverse(completions.begin(), completions.end());
+
+    return completions;
 }
 
 /* TODO */
@@ -112,6 +158,7 @@ bool DictionaryTrie::insertRec(string word, unsigned int freq,
  * @param word Word to find
  * @param index Index of character we are at in the word
  * @param curr Current node we are checking
+ * @return True if we find word so far. False otherwise.
  */
 bool DictionaryTrie::findRec(string word, unsigned int index,
                              TrieNode* curr) const {
@@ -131,5 +178,44 @@ bool DictionaryTrie::findRec(string word, unsigned int index,
         return findRec(word, index, curr->right);
     } else {  // go down middle
         return findRec(word, index + 1, curr->middle);
+    }
+}
+
+/* Helper method for predictCompletions to recurse through subtree.
+ * @param numCompletions Number of completions we need. Max size of heap.
+ * @param curr Pointer to current node we are checking
+ * @param word Word we are constructing
+ * @param pq Priority queue used to sort frequency of words
+ */
+void DictionaryTrie::predictCompletionsRec(
+    const unsigned int numCompletions, TrieNode* curr, string word,
+    std::priority_queue<pairing, vector<pairing>, greater<pairing>>& pq) {
+    // base case, if nullptr then return
+    if (curr == nullptr) {
+        return;
+    }
+
+    predictCompletionsRec(numCompletions, curr->left, word, pq);  // check left
+    predictCompletionsRec(numCompletions, curr->right, word,
+                          pq);  // check right
+
+    // add current letter to word
+    word += curr->data;
+
+    // check middle
+    predictCompletionsRec(numCompletions, curr->middle, word, pq);
+
+    // if current is a word, add it to priority queue
+    if (curr->word) {
+        // Reached numCompletions, must consider removing
+        if (pq.size() == numCompletions) {
+            // add word only if current word freq > lowest freq
+            if (curr->freq > pq.top().first) {
+                pq.pop();  // get rid of lowest freq word
+                pq.push(make_pair(curr->freq, word));  // add new word
+            }
+        } else {  // priority queue not full yet, just add word
+            pq.push(make_pair(curr->freq, word));
+        }
     }
 }

@@ -5,16 +5,19 @@
  *
  * Author: Aimee T Shao
  * Email: atshao@ucsd.edu
+ * Resources: UCSD CSE100 PA2 starter code, PA2 Implementation guide
  */
 #ifndef DICTIONARY_TRIE_HPP
 #define DICTIONARY_TRIE_HPP
 
+#include <queue>
 #include <string>
 #include <utility>
 #include <vector>
 
 using namespace std;
 
+typedef pair<int, string> pairing;  // used in predictCompletions
 /**
  * The class for a dictionary ADT, implemented as either
  * a mulit-way trie or a ternary search tree.
@@ -68,8 +71,19 @@ class DictionaryTrie {
      * @param word Word to find
      * @param index Index of character we are currently at in word
      * @param curr Current node we are checking
+     * @return True if we find word so far. False otherwise.
      */
     bool findRec(string word, unsigned int index, TrieNode* curr) const;
+
+    /* Helper method for predictCompletions.
+     * @param numCompletions Number of completions we need. Max size of heap.
+     * @param curr Pointer to current node we are checking
+     * @param word Word we are constructing
+     * @param pq Priority queue used to sort frequency of words
+     */
+    void predictCompletionsRec(
+        const unsigned int numCompletions, TrieNode* curr, string word,
+        std::priority_queue<pairing, vector<pairing>, greater<pairing>>& pq);
 
   public:
     /* Constructor.
