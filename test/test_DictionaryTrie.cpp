@@ -166,3 +166,36 @@ TEST(DictTrieTests, LARGE_PREDICT_COMPLETIONS_TEST) {
     // Assert that predict completions works correctly
     ASSERT_EQ(dict.predictCompletions("ea", 4), answer);
 }
+
+/* Large Predict Underscores test */
+TEST(DictTrieTests, LARGE_PREDICT_UNDERSCORES_TEST) {
+    DictionaryTrie dict;
+    dict.insert("gato", 5);
+    dict.insert("gote", 5);
+    dict.insert("geit", 5);
+    dict.insert("gete", 5);
+    dict.insert("gate", 5);
+    dict.insert("guts", 5);
+    dict.insert("goto", 10);
+    dict.insert("gute", 5);
+    dict.insert("gut", 5);
+    dict.insert("gits", 5);
+    dict.insert("gets", 5);
+    dict.insert("getz", 3);
+    dict.insert("geta", 3);
+
+    vector<string> answer;
+    answer.emplace_back("goto");
+    answer.emplace_back("gate");
+    answer.emplace_back("gato");
+    answer.emplace_back("gete");
+    answer.emplace_back("gets");
+    answer.emplace_back("gits");
+    answer.emplace_back("gote");
+    answer.emplace_back("gute");
+    answer.emplace_back("geta");
+    answer.emplace_back("getz");
+
+    // Assert that predict underscores works correctly
+    ASSERT_EQ(dict.predictUnderscores("g_t_", 11), answer);
+}
