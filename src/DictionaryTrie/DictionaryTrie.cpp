@@ -60,16 +60,19 @@ bool DictionaryTrie::find(string word) const {
  * The words must be found in the dictionary and will be listed from most to
  * least frequent.
  * @param prefix Prefix to complete
- * @param numCompletions Number of words to find in order from most frequency
- * @return vector of numCompletions words of most frequent completions of prefix
+ * @param numCompletions Number of words to find in order from most
+ * frequency
+ * @return vector of numCompletions words of most frequent completions of
+ * prefix
  */
 vector<string> DictionaryTrie::predictCompletions(string prefix,
                                                   unsigned int numCompletions) {
     // Stores final answer
     vector<string> completions;
 
-    // minHeap of pairs of frequency with the string, sorting frequency (first)
-    std::priority_queue<pairing, vector<pairing>, greater<pairing>> pq;
+    // minHeap of pairs of frequency with the string, sorting frequency
+    // (first)
+    std::priority_queue<pairing, vector<pairing>, Comp> pq;
 
     unsigned int index = 0;  // index to traverse prefix word
     TrieNode* curr = root;   // current node when traversing trie
@@ -115,7 +118,15 @@ vector<string> DictionaryTrie::predictCompletions(string prefix,
  */
 std::vector<string> DictionaryTrie::predictUnderscores(
     string pattern, unsigned int numCompletions) {
+    // Stores final answer
+    vector<string> completions;
 
+    // minHeap of pairs of frequency with the string
+    std::priority_queue<pairing, vector<pairing>, Comp> pq;
+    std::queue<TrieNode> levels;
+
+    unsigned int index = 0;  // index to traverse prefix word
+    TrieNode* curr = root;   // current node when traversing trie
     return {};
 }
 
@@ -194,22 +205,15 @@ bool DictionaryTrie::findRec(string word, unsigned int index,
  */
 void DictionaryTrie::predictCompletionsRec(
     const unsigned int numCompletions, TrieNode* curr, string word,
-    std::priority_queue<pairing, vector<pairing>, greater<pairing>>& pq) {
+    std::priority_queue<pairing, vector<pairing>, Comp>& pq) {
     // base case, if nullptr then return
     if (curr == nullptr) {
         return;
     }
 
-    predictCompletionsRec(numCompletions, curr->left, word, pq);  // check left
-    predictCompletionsRec(numCompletions, curr->right, word,
-                          pq);  // check right
-
-    // add current letter to word
-    word += curr->data;
-
-    // check middle
-    predictCompletionsRec(numCompletions, curr->middle, word, pq);
-
+    // check in alphabetical order to ensure correct for same freq
+    predictCompletionsRec(numCompletions, curr->left, word,
+                          pq);  // check left
     // if current is a word, add it to priority queue
     if (curr->word) {
         // Reached numCompletions, must consider removing
@@ -217,10 +221,16 @@ void DictionaryTrie::predictCompletionsRec(
             // add word only if current word freq > lowest freq
             if (curr->freq > pq.top().first) {
                 pq.pop();  // get rid of lowest freq word
-                pq.push(make_pair(curr->freq, word));  // add new word
+                pq.push(make_pair(curr->freq,
+                                  word + curr->data));  // add new word
             }
         } else {  // priority queue not full yet, just add word
-            pq.push(make_pair(curr->freq, word));
+            pq.push(make_pair(curr->freq, word + curr->data));
         }
     }
+    // check middle
+    predictCompletionsRec(numCompletions, curr->middle, word + curr->data, pq);
+
+    predictCompletionsRec(numCompletions, curr->right, word,
+                          pq);  // check right
 }

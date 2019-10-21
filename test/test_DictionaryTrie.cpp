@@ -112,6 +112,21 @@ TEST(DictTrieTests, LARGE_FIND_FALSE_TEST) {
     ASSERT_FALSE(dict.find("middle"));
 }
 
+/* Predict Completions same frequency test */
+TEST(DictTrieTests, PREDICT_COMPLETIONS_SAME_TEST) {
+    DictionaryTrie dict;
+    dict.insert("and", 1);
+    dict.insert("ant", 1);
+    dict.insert("ana", 1);
+
+    vector<string> answer;
+    answer.emplace_back("ana");
+    answer.emplace_back("and");
+
+    // Assert that predict completions works correctly
+    ASSERT_EQ(dict.predictCompletions("a", 2), answer);
+}
+
 /* Predict Completions test */
 TEST(DictTrieTests, PREDICT_COMPLETIONS_TEST) {
     DictionaryTrie dict;

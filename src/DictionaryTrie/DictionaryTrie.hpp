@@ -55,6 +55,27 @@ class DictionaryTrie {
     };
     typedef DictionaryTrie::TrieNode TrieNode;
 
+    /* Comparator class to determine how to sort in the priority queue for
+     * predictions.
+     */
+    class Comp {
+      public:
+        /* Compare function. In order of first in pair and reverse order of
+         * second if tied.
+         * @param a First pair to compare with second pair
+         * @param b Second pair to compare with first pair
+         * @return True if a > b, false if a < b.
+         */
+        bool operator()(const pair<int, string>& a,
+                        const pair<int, string>& b) {
+            if (a.first ==
+                b.first) {  // if freq equal, reverse alphabetical order
+                return a.second < b.second;
+            }
+            return a.first > b.first;
+        }
+    };
+
     TrieNode* root;  // pointer to root of the dictionary trie, or 0 if empty
 
     /* Helper method to insert a word recursively.
@@ -83,7 +104,7 @@ class DictionaryTrie {
      */
     void predictCompletionsRec(
         const unsigned int numCompletions, TrieNode* curr, string word,
-        std::priority_queue<pairing, vector<pairing>, greater<pairing>>& pq);
+        std::priority_queue<pairing, vector<pairing>, Comp>& pq);
 
   public:
     /* Constructor.
