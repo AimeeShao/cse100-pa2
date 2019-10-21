@@ -96,13 +96,26 @@ class DictionaryTrie {
      */
     bool findRec(string word, unsigned int index, TrieNode* curr) const;
 
-    /* Helper method for predictCompletions.
+    /* Helper method for predictCompletions. Uses recursion.
      * @param numCompletions Number of completions we need. Max size of heap.
      * @param curr Pointer to current node we are checking
      * @param word Word we are constructing
      * @param pq Priority queue used to sort frequency of words
      */
     void predictCompletionsRec(
+        const unsigned int numCompletions, TrieNode* curr, string word,
+        std::priority_queue<pairing, vector<pairing>, Comp>& pq);
+
+    /* Helper method for predictUnderscores. Uses recursion.
+     * @param pattern Pattern that the word should match
+     * @param index Index of location in pattern we are at
+     * @param numCompletions Number of completions we need. Max size of heap.
+     * @param curr Pointer to current node we are checking
+     * @param word Word we are constructing
+     * @param pq Priority queue used to sort frequency of words
+     */
+    void predictUnderscoresRec(
+        const string pattern, unsigned int index,
         const unsigned int numCompletions, TrieNode* curr, string word,
         std::priority_queue<pairing, vector<pairing>, Comp>& pq);
 

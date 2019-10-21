@@ -123,11 +123,19 @@ std::vector<string> DictionaryTrie::predictUnderscores(
 
     // minHeap of pairs of frequency with the string
     std::priority_queue<pairing, vector<pairing>, Comp> pq;
-    std::queue<TrieNode> levels;
 
-    unsigned int index = 0;  // index to traverse prefix word
-    TrieNode* curr = root;   // current node when traversing trie
-    return {};
+    // find all words matching pattern
+    predictUnderscoresRec(pattern, 0, numCompletions, root, "", pq);
+
+    while (!pq.empty()) {  // move words in pq to vector in order
+        completions.push_back(pq.top().second);
+        pq.pop();
+    }
+
+    // reverse so in order from greatest freq to lowest
+    std::reverse(completions.begin(), completions.end());
+
+    return completions;
 }
 
 /* Deallocates the dictionary trie. */
@@ -233,4 +241,56 @@ void DictionaryTrie::predictCompletionsRec(
 
     predictCompletionsRec(numCompletions, curr->right, word,
                           pq);  // check right
+}
+
+/* Helper method for predictUnderscores. Uses recursion.
+ * @param pattern Pattern that the word should match
+ * @param index Index of location in pattern we are at
+ * @param numCompletions Number of completions we need. Max size of heap.
+ * @param curr Pointer to current node we are checking
+ * @param word Word we are constructing
+ * @param pq Priority queue used to sort frequency of words
+ */
+void DictionaryTrie::predictUnderscoresRec(
+    const string pattern, unsigned int index, const unsigned int numCompletions,
+    TrieNode* curr, string word,
+    std::priority_queue<pairing, vector<pairing>, Comp>& pq) {
+    // base case, we are at one level beyond or no more words
+    if (index >= pattern.length() || curr == nullptr) {
+        return;
+    }
+
+    // check in alphabetical order to ensure correct for same freq
+    // check left only if wildcard or less than
+    if (pattern.at(index) == '_' || pattern.at(index) < curr->data) {
+        predictUnderscoresRec(pattern, index, numCompletions, curr->left, word,
+                              pq);
+    }
+
+    // consider adding word and going down middle only if still matching
+    if (pattern.at(index) == '_' || pattern.at(index) == curr->data) {
+        // if current is a word and end of pattern, add it to priority queue
+        if (curr->word && index == pattern.length() - 1) {
+            // Reached numCompletions, must consider removing
+            if (pq.size() == numCompletions) {
+                // add word only if current word freq > lowest freq
+                if (curr->freq > pq.top().first) {
+                    pq.pop();  // get rid of lowest freq word
+                    pq.push(make_pair(curr->freq,
+                                      word + curr->data));  // add new word
+                }
+            } else {  // priority queue not full yet, just add word
+                pq.push(make_pair(curr->freq, word + curr->data));
+            }
+        }
+
+        predictUnderscoresRec(pattern, index + 1, numCompletions, curr->middle,
+                              word + curr->data, pq);  // check middle
+    }
+
+    // check right only if underscore or greater than
+    if (pattern.at(index) == '_' || pattern.at(index) > curr->data) {
+        predictUnderscoresRec(pattern, index, numCompletions, curr->right, word,
+                              pq);
+    }
 }
