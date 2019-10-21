@@ -1,5 +1,9 @@
-/*
- * TODO: File Header
+/* User interaction program. Takes in one file for input, reads every word in
+ * file and populates it into a DictionaryTrie with corresponding frequencies.
+ *
+ * Author: Aimee T Shao
+ * Email: atshao@ucsd.edu
+ * Resources: UCSD CSE100 PA2 starter code, PA2 Implementation Guide
  */
 #include <fstream>
 #include <iostream>
@@ -73,7 +77,10 @@ int main(int argc, char** argv) {
         cout << "Enter a number of completions:" << endl;
         cin >> numberOfCompletions;
 
-        // TODO
+        // print out strings in vector returned by dictionary trie's prediction
+        for (string s : dt->predictCompletions(word, numberOfCompletions)) {
+            cout << s << endl;
+        }
 
         cout << "Continue? (y/n)" << endl;
         cin >> cont;
