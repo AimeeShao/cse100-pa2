@@ -96,10 +96,9 @@ vector<string> DictionaryTrie::predictCompletions(string prefix,
     // find all other words with the prefix
     predictCompletionsRec(numCompletions, curr, prefix, pq);
 
-    while (numCompletions > 0) {  // move words in pq to vector in order
+    while (!pq.empty()) {  // move words in pq to vector in order
         completions.push_back(pq.top().second);
         pq.pop();
-        numCompletions--;
     }
 
     // reverse so in order from greatest freq to lowest

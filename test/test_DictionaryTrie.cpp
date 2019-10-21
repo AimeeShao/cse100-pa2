@@ -26,6 +26,12 @@ TEST(DictTrieTests, EMPTY_TEST) {
     ASSERT_EQ(dict.find("abrakadabra"), false);
 }
 
+/* Empty predict completion test */
+TEST(DictTrieTests, EMPTY_PREDICT_TEST) {
+    DictionaryTrie dict;
+    ASSERT_EQ(dict.predictCompletions("ea", 5), vector<string>());
+}
+
 /* small word insert Test */
 TEST(DictTrieTests, SMALL_WORD_INSERT_TEST) {
     DictionaryTrie dict;
@@ -117,9 +123,10 @@ TEST(DictTrieTests, PREDICT_COMPLETIONS_TEST) {
     vector<string> answer;
     answer.emplace_back("me");
     answer.emplace_back("mid");
+    answer.emplace_back("mind");
 
     // Assert that predict completions works correctly
-    ASSERT_EQ(dict.predictCompletions("m", 2), answer);
+    ASSERT_EQ(dict.predictCompletions("m", 10), answer);
 }
 
 /* Large Predict Completions test */
@@ -128,16 +135,19 @@ TEST(DictTrieTests, LARGE_PREDICT_COMPLETIONS_TEST) {
     dict.insert("a", 5);
     dict.insert("at", 5);
     dict.insert("ate", 5);
+    dict.insert("eba", 2);
     dict.insert("ear", 3);
     dict.insert("east", 1);
     dict.insert("eat", 4);
     dict.insert("eats", 2);
+    dict.insert("ea", 20);
 
     vector<string> answer;
+    answer.emplace_back("ea");
     answer.emplace_back("eat");
     answer.emplace_back("ear");
     answer.emplace_back("eats");
 
     // Assert that predict completions works correctly
-    ASSERT_EQ(dict.predictCompletions("ea", 3), answer);
+    ASSERT_EQ(dict.predictCompletions("ea", 4), answer);
 }
