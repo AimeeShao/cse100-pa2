@@ -64,6 +64,13 @@ class DictionaryTrie {
     bool insertRec(string word, unsigned int freq, unsigned int index,
                    TrieNode* curr);
 
+    /* Helper method to find the given word recursively.
+     * @param word Word to find
+     * @param index Index of character we are currently at in word
+     * @param curr Current node we are checking
+     */
+    bool findRec(string word, unsigned int index, TrieNode* curr) const;
+
   public:
     /* Constructor.
      * Initializes the dictionary trie.

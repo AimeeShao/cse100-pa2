@@ -43,7 +43,12 @@ bool DictionaryTrie::insert(string word, unsigned int freq) {
  * @param word Query word to find in trie
  * @return True if we found the word. False otherwise.
  */
-bool DictionaryTrie::find(string word) const { return false; }
+bool DictionaryTrie::find(string word) const {
+    if (root == nullptr) {  // empty then false
+        return false;
+    }  // otherwise, go find
+    return findRec(word, 0, root);
+}
 
 /* Finds up to numCompletions of most frequent completions given a prefix.
  * The words must be found in the dictionary and will be listed from most to
@@ -88,13 +93,11 @@ bool DictionaryTrie::insertRec(string word, unsigned int freq,
     if (word.at(index) < curr->data) {  // go left
         if (!curr->left) {              // insert new node
             curr->left = new TrieNode(word.at(index));
-            return insertRec(word, freq, index + 1, curr->left);
         }
         return insertRec(word, freq, index, curr->left);
     } else if (word.at(index) > curr->data) {  // go right
         if (!curr->right) {                    // insert new node
             curr->right = new TrieNode(word.at(index));
-            return insertRec(word, freq, index + 1, curr->right);
         }
         return insertRec(word, freq, index, curr->right);
     } else {                  // same letter, go down middle
@@ -102,5 +105,31 @@ bool DictionaryTrie::insertRec(string word, unsigned int freq,
             curr->middle = new TrieNode(word.at(index + 1));
         }
         return insertRec(word, freq, index + 1, curr->middle);
+    }
+}
+
+/* Helper method to find the given word recursively.
+ * @param word Word to find
+ * @param index Index of character we are at in the word
+ * @param curr Current node we are checking
+ */
+bool DictionaryTrie::findRec(string word, unsigned int index,
+                             TrieNode* curr) const {
+    // cant find
+    if (curr == nullptr) {
+        return false;
+    }
+
+    // base case, last letter and found node
+    if (index == word.length() - 1 && word.at(index) == curr->data) {
+        return curr->word;  // if word or if not a word
+    }
+
+    if (word.at(index) < curr->data) {  // go left
+        return findRec(word, index, curr->left);
+    } else if (word.at(index) > curr->data) {  // go right
+        return findRec(word, index, curr->right);
+    } else {  // go down middle
+        return findRec(word, index + 1, curr->middle);
     }
 }
