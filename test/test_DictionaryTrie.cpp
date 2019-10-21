@@ -121,3 +121,23 @@ TEST(DictTrieTests, PREDICT_COMPLETIONS_TEST) {
     // Assert that predict completions works correctly
     ASSERT_EQ(dict.predictCompletions("m", 2), answer);
 }
+
+/* Large Predict Completions test */
+TEST(DictTrieTests, LARGE_PREDICT_COMPLETIONS_TEST) {
+    DictionaryTrie dict;
+    dict.insert("a", 5);
+    dict.insert("at", 5);
+    dict.insert("ate", 5);
+    dict.insert("ear", 3);
+    dict.insert("east", 1);
+    dict.insert("eat", 4);
+    dict.insert("eats", 2);
+
+    vector<string> answer;
+    answer.emplace_back("eat");
+    answer.emplace_back("ear");
+    answer.emplace_back("eats");
+
+    // Assert that predict completions works correctly
+    ASSERT_EQ(dict.predictCompletions("ea", 3), answer);
+}
