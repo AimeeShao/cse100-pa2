@@ -1,7 +1,9 @@
 /**
- * TODO: File HEADER
+ * Testing class to make unit tests for the dictionary trie class.
  *
- * Author:
+ * Author: Aimee T Shao
+ * Email: atshao@ucsd.edu
+ * Resources: UCSD CSE100 PA2 starter code, PA2 Implementation Guide
  */
 
 #include <algorithm>
