@@ -37,6 +37,7 @@ bool DictionaryTrie::insert(string word, unsigned int freq) {
         if (word.length() == 1) {  // one letter word then done.
             root->word = true;
             root->freq = freq;
+            root->maxFreq = freq;
             return true;
         }
     }
@@ -76,6 +77,7 @@ vector<string> DictionaryTrie::predictCompletions(string prefix,
 
     unsigned int index = 0;  // index to traverse prefix word
     TrieNode* curr = root;   // current node when traversing trie
+    threshold = 0;           // reset threshold, freq are all positive
 
     while (index < prefix.length()) {  // find first node where prefix exists
         if (curr == nullptr) {  // return empty vector if no completions exist
@@ -157,6 +159,7 @@ bool DictionaryTrie::insertRec(string word, unsigned int freq,
         }  // otherwise new word
         curr->word = true;
         curr->freq = freq;
+        curr->maxFreq = freq;
         return true;
     }
 
@@ -164,17 +167,26 @@ bool DictionaryTrie::insertRec(string word, unsigned int freq,
         if (!curr->left) {              // insert new node
             curr->left = new TrieNode(word.at(index));
         }
-        return insertRec(word, freq, index, curr->left);
+        bool result = insertRec(word, freq, index, curr->left);
+        // update maxFreq
+        curr->maxFreq = std::max(curr->maxFreq, curr->left->maxFreq);
+        return result;
     } else if (word.at(index) > curr->data) {  // go right
         if (!curr->right) {                    // insert new node
             curr->right = new TrieNode(word.at(index));
         }
-        return insertRec(word, freq, index, curr->right);
+        bool result = insertRec(word, freq, index, curr->right);
+        // update maxFreq
+        curr->maxFreq = std::max(curr->maxFreq, curr->right->maxFreq);
+        return result;
     } else {                  // same letter, go down middle
         if (!curr->middle) {  // insert next letter
             curr->middle = new TrieNode(word.at(index + 1));
         }
-        return insertRec(word, freq, index + 1, curr->middle);
+        bool result = insertRec(word, freq, index + 1, curr->middle);
+        // update maxFreq
+        curr->maxFreq = std::max(curr->maxFreq, curr->middle->maxFreq);
+        return result;
     }
 }
 
@@ -215,13 +227,12 @@ void DictionaryTrie::predictCompletionsRec(
     const unsigned int numCompletions, TrieNode* curr, string word,
     std::priority_queue<pairing, vector<pairing>, Comp>& pq) {
     // base case, if nullptr then return
-    if (curr == nullptr) {
+    if (curr == nullptr || curr->maxFreq <= threshold) {
         return;
     }
 
-    // check in alphabetical order to ensure correct for same freq
-    predictCompletionsRec(numCompletions, curr->left, word,
-                          pq);  // check left
+    predictCompletionsRec(numCompletions, curr->left, word, pq);  // check left
+
     // if current is a word, add it to priority queue
     if (curr->word) {
         // Reached numCompletions, must consider removing
@@ -231,16 +242,20 @@ void DictionaryTrie::predictCompletionsRec(
                 pq.pop();  // get rid of lowest freq word
                 pq.push(make_pair(curr->freq,
                                   word + curr->data));  // add new word
+                threshold = pq.top().first;             // update threshold
             }
         } else {  // priority queue not full yet, just add word
             pq.push(make_pair(curr->freq, word + curr->data));
+            if (pq.size() == numCompletions) {  // reached numCompletions
+                // set threshold as minimum freq in pq
+                threshold = pq.top().first;
+            }
         }
     }
     // check middle
     predictCompletionsRec(numCompletions, curr->middle, word + curr->data, pq);
-
-    predictCompletionsRec(numCompletions, curr->right, word,
-                          pq);  // check right
+    // check right
+    predictCompletionsRec(numCompletions, curr->right, word, pq);
 }
 
 /* Helper method for predictUnderscores. Uses recursion.

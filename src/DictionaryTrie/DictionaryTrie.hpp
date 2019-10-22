@@ -35,12 +35,13 @@ class DictionaryTrie {
         char const data;  // the constant data in this node
         bool word;        // determines if this is a word node
         int freq;         // frequency of this word if word node
+        int maxFreq;      // maxFrequency in the subtree
 
         /* Constructor.
          * Initializes a TrieNode with given data.
          * @param c Data/element of this node
          */
-        TrieNode(const char& d) : data(d), word(false), freq(0) {
+        TrieNode(const char& d) : data(d), word(false), freq(0), maxFreq(0) {
             left = right = middle = nullptr;
         }
 
@@ -77,6 +78,7 @@ class DictionaryTrie {
     };
 
     TrieNode* root;  // pointer to root of the dictionary trie, or 0 if empty
+    int threshold;  // threshold for minimum frequency in vector for predictions
 
     /* Helper method to insert a word recursively.
      * @param word Word to insert

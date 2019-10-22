@@ -1,15 +1,15 @@
-att
+iterating through alphabet
 10
 y
-te___
-15
-y
-the __
+a
 10
 y
-__
-5
+the
+10
 y
-wond__
+app
+10
+y
+man
 10
 n
