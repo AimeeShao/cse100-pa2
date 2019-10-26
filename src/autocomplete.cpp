@@ -76,17 +76,23 @@ int main(int argc, char** argv) {
         getline(cin, word);
         cout << "Enter a number of completions:" << endl;
         cin >> numberOfCompletions;
-
-        // if contains underscore, use predictUnderscores
-        if (word.find("_") != std::string::npos) {
-            for (string s : dt->predictUnderscores(word, numberOfCompletions)) {
-                cout << s << endl;
-            }
+        if (cin.fail()) {  // bad input
+            cin.clear();
+            cin.ignore(1000, '\n');
         } else {
-            // print out strings in vector returned by dictionary trie's
-            // prediction
-            for (string s : dt->predictCompletions(word, numberOfCompletions)) {
-                cout << s << endl;
+            // if contains underscore, use predictUnderscores
+            if (word.find("_") != std::string::npos) {
+                for (string s :
+                     dt->predictUnderscores(word, numberOfCompletions)) {
+                    cout << s << endl;
+                }
+            } else {
+                // print out strings in vector returned by dictionary trie's
+                // prediction
+                for (string s :
+                     dt->predictCompletions(word, numberOfCompletions)) {
+                    cout << s << endl;
+                }
             }
         }
 
