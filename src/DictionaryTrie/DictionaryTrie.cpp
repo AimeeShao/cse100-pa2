@@ -71,6 +71,11 @@ vector<string> DictionaryTrie::predictCompletions(string prefix,
     // Stores final answer
     vector<string> completions;
 
+    // numCompletions = 0, then return empty completions vector
+    if (numCompletions <= 0) {
+        return completions;
+    }
+
     // minHeap of pairs of frequency with the string, sorting frequency
     // (first)
     std::priority_queue<pairing, vector<pairing>, Comp> pq;
