@@ -12,7 +12,7 @@
 #include <iostream>
 #include <queue>
 
-typedef pair<int, string> pairing;  // used in predictCompletions
+typedef pair<unsigned int, string> pairing;  // used in predictCompletions
 
 /* Constructor.
  * Initializes the dictionary trie.
@@ -72,7 +72,7 @@ vector<string> DictionaryTrie::predictCompletions(string prefix,
     vector<string> completions;
 
     // numCompletions = 0, then return empty completions vector
-    if (numCompletions <= 0) {
+    if (numCompletions == 0) {
         return completions;
     }
 
@@ -127,6 +127,11 @@ std::vector<string> DictionaryTrie::predictUnderscores(
     string pattern, unsigned int numCompletions) {
     // Stores final answer
     vector<string> completions;
+
+    // numCompletions = 0, then return empty completions vector
+    if (numCompletions == 0) {
+        return completions;
+    }
 
     // minHeap of pairs of frequency with the string
     std::priority_queue<pairing, vector<pairing>, Comp> pq;

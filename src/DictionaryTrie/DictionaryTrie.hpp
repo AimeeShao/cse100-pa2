@@ -17,7 +17,7 @@
 
 using namespace std;
 
-typedef pair<int, string> pairing;  // used in predictCompletions
+typedef pair<unsigned int, string> pairing;  // used in predictCompletions
 /**
  * The class for a dictionary ADT, implemented as either
  * a mulit-way trie or a ternary search tree.
@@ -32,10 +32,10 @@ class DictionaryTrie {
         TrieNode* left;
         TrieNode* right;
         TrieNode* middle;
-        char const data;  // the constant data in this node
-        bool word;        // determines if this is a word node
-        int freq;         // frequency of this word if word node
-        int maxFreq;      // maxFrequency in the subtree
+        char const data;       // the constant data in this node
+        bool word;             // determines if this is a word node
+        unsigned int freq;     // frequency of this word if word node
+        unsigned int maxFreq;  // maxFrequency in the subtree
 
         /* Constructor.
          * Initializes a TrieNode with given data.
@@ -67,8 +67,8 @@ class DictionaryTrie {
          * @param b Second pair to compare with first pair
          * @return True if a > b, false if a < b.
          */
-        bool operator()(const pair<int, string>& a,
-                        const pair<int, string>& b) {
+        bool operator()(const pairing& a,
+                        const pairing& b) {
             if (a.first ==
                 b.first) {  // if freq equal, reverse alphabetical order
                 return a.second < b.second;
@@ -78,7 +78,7 @@ class DictionaryTrie {
     };
 
     TrieNode* root;  // pointer to root of the dictionary trie, or 0 if empty
-    int threshold;  // threshold for minimum frequency in vector for predictions
+    unsigned int threshold;  // threshold for min frequency in predictions vec
 
     /* Helper method to insert a word recursively.
      * @param word Word to insert
